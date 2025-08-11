@@ -74,6 +74,18 @@ export const schoolRankings: School[] = [
   { name: '울산중앙고등학교', region: '울산', averageScore: 90, participantCount: 145 },
   { name: '대구경북고등학교', region: '대구', averageScore: 89, participantCount: 178 },
   { name: '제주한라고등학교', region: '제주', averageScore: 88, participantCount: 134 },
+  { name: '강남고등학교', region: '서울', averageScore: 87, participantCount: 220 },
+  { name: '수원화성고등학교', region: '경기', averageScore: 86, participantCount: 195 },
+  { name: '전주완산고등학교', region: '전북', averageScore: 85, participantCount: 142 },
+  { name: '청주청원고등학교', region: '충북', averageScore: 84, participantCount: 158 },
+  { name: '춘천고등학교', region: '강원', averageScore: 83, participantCount: 126 },
+  { name: '안동고등학교', region: '경북', averageScore: 82, participantCount: 139 },
+  { name: '목포고등학교', region: '전남', averageScore: 81, participantCount: 147 },
+  { name: '창원경남고등학교', region: '경남', averageScore: 80, participantCount: 163 },
+  { name: '포항제철고등학교', region: '경북', averageScore: 79, participantCount: 129 },
+  { name: '천안북일고등학교', region: '충남', averageScore: 78, participantCount: 174 },
+  { name: '김해고등학교', region: '경남', averageScore: 77, participantCount: 152 },
+  { name: '의정부고등학교', region: '경기', averageScore: 76, participantCount: 168 },
 ];
 
 // 개인 랭킹 더미 데이터  

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Quiz, { QuizResult } from './components/Quiz';
 import QuizResultComponent from './components/QuizResult';
 import SchoolSelectionModal from './components/SchoolSelectionModal';
+import { schoolRankings, playerRankings } from './data/quizData';
 
 // 웨이팅 리스트 모달 컴포넌트
 function WaitingListModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -266,8 +267,119 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 사용 시나리오 섹션 */}
+      {/* 실시간 랭킹 대시보드 섹션 */}
       <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
+            🏆 실시간 학교 랭킹
+          </h2>
+          
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* 학교 랭킹 */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-8 shadow-lg">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                🏫 전국 학교 순위
+              </h3>
+              
+              <div className="space-y-3">
+                {schoolRankings.slice(0, 8).map((school, index) => (
+                  <div 
+                    key={index}
+                    className={`flex justify-between items-center p-4 rounded-xl transition-all hover:shadow-md ${
+                      index < 3 
+                        ? 'bg-gradient-to-r from-yellow-100 to-yellow-50 border border-yellow-200' 
+                        : 'bg-white border border-gray-100'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className={`text-2xl font-bold ${
+                        index === 0 ? 'text-yellow-600' :
+                        index === 1 ? 'text-gray-600' :
+                        index === 2 ? 'text-amber-600' : 'text-gray-800'
+                      }`}>
+                        {index < 3 ? ['🥇', '🥈', '🥉'][index] : `#${index + 1}`}
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900">{school.name}</div>
+                        <div className="text-sm text-gray-600">{school.region}</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-[#0041C2]">{school.averageScore}점</div>
+                      <div className="text-sm text-gray-500">{school.participantCount}명 참여</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 개인 랭킹 */}
+            <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl p-8 shadow-lg">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+                👤 개인 최고 기록
+              </h3>
+              
+              <div className="space-y-3">
+                {playerRankings.slice(0, 8).map((player, index) => (
+                  <div 
+                    key={index}
+                    className={`flex justify-between items-center p-4 rounded-xl transition-all hover:shadow-md ${
+                      index < 3 
+                        ? 'bg-gradient-to-r from-green-100 to-green-50 border border-green-200' 
+                        : 'bg-white border border-gray-100'
+                    }`}
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className={`text-xl font-bold ${
+                        index === 0 ? 'text-yellow-600' :
+                        index === 1 ? 'text-gray-600' :
+                        index === 2 ? 'text-amber-600' : 'text-gray-800'
+                      }`}>
+                        {index < 3 ? ['🥇', '🥈', '🥉'][index] : `#${index + 1}`}
+                      </div>
+                      <div>
+                        <div className="font-bold text-gray-900">{player.name}</div>
+                        <div className="text-sm text-gray-600">{player.school}</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-green-600">{player.score}점</div>
+                      <div className="text-sm text-gray-500">
+                        {Math.floor(player.time / 60)}:{(player.time % 60).toString().padStart(2, '0')}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 참여 현황 통계 */}
+          <div className="mt-12 grid md:grid-cols-3 gap-6">
+            <div className="bg-[#0041C2] text-white rounded-2xl p-6 text-center">
+              <div className="text-4xl font-bold mb-2">
+                {schoolRankings.reduce((sum, school) => sum + school.participantCount, 0).toLocaleString()}
+              </div>
+              <div className="text-blue-200">총 참여자 수</div>
+            </div>
+            
+            <div className="bg-[#FFD60A] text-black rounded-2xl p-6 text-center">
+              <div className="text-4xl font-bold mb-2">{schoolRankings.length}</div>
+              <div className="text-gray-800">참여 학교 수</div>
+            </div>
+            
+            <div className="bg-green-500 text-white rounded-2xl p-6 text-center">
+              <div className="text-4xl font-bold mb-2">
+                {Math.round(schoolRankings.reduce((sum, school) => sum + school.averageScore, 0) / schoolRankings.length)}
+              </div>
+              <div className="text-green-200">전국 평균 점수</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 사용 시나리오 섹션 */}
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">
             이렇게 진행됩니다
@@ -302,9 +414,17 @@ export default function Home() {
             </div>
                 </div>
           
-          <p className="text-center text-gray-600 bg-gray-100 p-4 rounded-lg">
-            <em>실제 게임은 출시 시 제공됩니다. 지금은 체험 영상만 제공돼요.</em>
-          </p>
+          <div className="text-center">
+            <button 
+              onClick={openSchoolModal}
+              className="bg-[#0041C2] text-white font-bold px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              🎮 지금 바로 체험해보기
+            </button>
+            <p className="text-gray-600 mt-4">
+              <em>실제 퀴즈를 지금 바로 체험할 수 있습니다!</em>
+            </p>
+          </div>
                 </div>
       </section>
 
