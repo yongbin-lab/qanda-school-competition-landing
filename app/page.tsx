@@ -1,6 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Quiz, { QuizResult } from './components/Quiz';
+import QuizResultComponent from './components/QuizResult';
+import SchoolSelectionModal from './components/SchoolSelectionModal';
 
 // 웨이팅 리스트 모달 컴포넌트
 function WaitingListModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -80,7 +83,7 @@ function WaitingListModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#0041C2] text-gray-900 placeholder-gray-500 bg-white"
                 />
-              </div>
+                </div>
               
               <div className="mb-6">
                 <input
@@ -108,12 +111,65 @@ function WaitingListModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   );
 }
 
+type AppState = 'landing' | 'quiz' | 'quiz-result';
+
 export default function Home() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentState, setCurrentState] = useState<AppState>('landing');
+  const [isWaitlistModalOpen, setIsWaitlistModalOpen] = useState(false);
+  const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
+  const [quizResult, setQuizResult] = useState<QuizResult | null>(null);
+  const [currentPlayer, setCurrentPlayer] = useState<{ name: string; school: string } | null>(null);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openWaitlistModal = () => setIsWaitlistModalOpen(true);
+  const closeWaitlistModal = () => setIsWaitlistModalOpen(false);
+  
+  const openSchoolModal = () => setIsSchoolModalOpen(true);
+  const closeSchoolModal = () => setIsSchoolModalOpen(false);
 
+  const handleQuizStart = (name: string, school: string) => {
+    setCurrentPlayer({ name, school });
+    setCurrentState('quiz');
+    closeSchoolModal();
+  };
+
+  const handleQuizComplete = (result: QuizResult) => {
+    setQuizResult(result);
+    setCurrentState('quiz-result');
+  };
+
+  const handlePlayAgain = () => {
+    setQuizResult(null);
+    setCurrentState('quiz');
+  };
+
+  const handleGoHome = () => {
+    setCurrentState('landing');
+    setQuizResult(null);
+    setCurrentPlayer(null);
+  };
+
+  // 현재 상태에 따른 렌더링
+  if (currentState === 'quiz' && currentPlayer) {
+    return (
+      <Quiz
+        playerName={currentPlayer.name}
+        playerSchool={currentPlayer.school}
+        onQuizComplete={handleQuizComplete}
+      />
+    );
+  }
+
+  if (currentState === 'quiz-result' && quizResult) {
+    return (
+      <QuizResultComponent
+        result={quizResult}
+        onPlayAgain={handlePlayAgain}
+        onGoHome={handleGoHome}
+      />
+    );
+  }
+
+  // 기본: 랜딩페이지
   return (
     <div className="min-h-screen">
       {/* 히어로 섹션 */}
@@ -148,12 +204,21 @@ export default function Home() {
                 치킨 300마리를 쟁취하라!
               </p>
               
-              <button 
-                onClick={openModal}
-                className="bg-[#FFD60A] text-black text-xl font-bold px-8 py-4 rounded-2xl hover:bg-yellow-400 transition-colors shadow-lg hover:shadow-xl"
-              >
-                지금 학교 대표로 도전하기 🚀
-              </button>
+              <div className="space-y-4">
+                <button 
+                  onClick={openSchoolModal}
+                  className="block w-full bg-[#FFD60A] text-black text-xl font-bold px-8 py-4 rounded-2xl hover:bg-yellow-400 transition-colors shadow-lg hover:shadow-xl"
+                >
+                  🎯 지금 퀴즈 도전하기
+                </button>
+                
+                <button 
+                  onClick={openWaitlistModal}
+                  className="block w-full bg-white bg-opacity-20 text-white text-lg font-medium px-8 py-3 rounded-2xl hover:bg-opacity-30 transition-colors border border-white border-opacity-30"
+                >
+                  📧 정식 출시 알림 받기
+                </button>
+              </div>
             </div>
             
             {/* 우측 일러스트 */}
@@ -300,12 +365,21 @@ export default function Home() {
           <h2 className="text-4xl font-bold mb-8">
             지금 바로 참여하고 치킨을 쟁취하세요! 🍗
           </h2>
-            <button
-            onClick={openModal}
-            className="bg-[#FFD60A] text-black text-2xl font-bold px-12 py-6 rounded-2xl hover:bg-yellow-400 transition-colors shadow-lg hover:shadow-xl"
+                      <div className="space-y-4">
+            <button 
+              onClick={openSchoolModal}
+              className="bg-[#FFD60A] text-black text-2xl font-bold px-12 py-6 rounded-2xl hover:bg-yellow-400 transition-colors shadow-lg hover:shadow-xl mr-4"
             >
-            학교 대표로 도전하기
+              🎯 지금 퀴즈 도전하기
             </button>
+            
+            <button
+              onClick={openWaitlistModal}
+              className="bg-white bg-opacity-20 text-white text-xl font-medium px-8 py-4 rounded-2xl hover:bg-opacity-30 transition-colors border border-white border-opacity-30"
+            >
+              📧 출시 알림 받기
+            </button>
+          </div>
         </div>
       </section>
 
@@ -321,8 +395,13 @@ export default function Home() {
         </div>
       </footer>
 
-      {/* 웨이팅 리스트 모달 */}
-      <WaitingListModal isOpen={isModalOpen} onClose={closeModal} />
+      {/* 모달들 */}
+      <WaitingListModal isOpen={isWaitlistModalOpen} onClose={closeWaitlistModal} />
+      <SchoolSelectionModal 
+        isOpen={isSchoolModalOpen} 
+        onClose={closeSchoolModal}
+        onStart={handleQuizStart}
+      />
     </div>
   );
 }
