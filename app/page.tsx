@@ -207,16 +207,16 @@ export default function Home() {
               <div className="space-y-4">
                 <button 
                   onClick={openSchoolModal}
-                  className="block w-full bg-[#FFD60A] text-black text-xl font-bold px-8 py-4 rounded-2xl hover:bg-yellow-400 transition-colors shadow-lg hover:shadow-xl"
+                  className="w-full bg-[#FFD60A] text-black text-xl font-bold px-8 py-4 rounded-2xl hover:bg-yellow-400 transition-colors shadow-lg hover:shadow-xl"
                 >
-                  🎯 지금 퀴즈 도전하기
+                  학교 대표로 도전하기 🚀
                 </button>
                 
                 <button 
                   onClick={openWaitlistModal}
-                  className="block w-full bg-white bg-opacity-20 text-white text-lg font-medium px-8 py-3 rounded-2xl hover:bg-opacity-30 transition-colors border border-white border-opacity-30"
+                  className="w-full bg-white bg-opacity-20 text-white text-lg font-medium px-8 py-3 rounded-2xl hover:bg-opacity-30 transition-colors border border-white border-opacity-30"
                 >
-                  📧 정식 출시 알림 받기
+                  정식 출시 알림 받기 📧
                 </button>
               </div>
             </div>
@@ -365,19 +365,19 @@ export default function Home() {
           <h2 className="text-4xl font-bold mb-8">
             지금 바로 참여하고 치킨을 쟁취하세요! 🍗
           </h2>
-                      <div className="space-y-4">
+                                <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
               onClick={openSchoolModal}
-              className="bg-[#FFD60A] text-black text-2xl font-bold px-12 py-6 rounded-2xl hover:bg-yellow-400 transition-colors shadow-lg hover:shadow-xl mr-4"
+              className="bg-[#FFD60A] text-black text-2xl font-bold px-12 py-6 rounded-2xl hover:bg-yellow-400 transition-colors shadow-lg hover:shadow-xl"
             >
-              🎯 지금 퀴즈 도전하기
+              학교 대표로 도전하기 🚀
             </button>
             
             <button
               onClick={openWaitlistModal}
               className="bg-white bg-opacity-20 text-white text-xl font-medium px-8 py-4 rounded-2xl hover:bg-opacity-30 transition-colors border border-white border-opacity-30"
             >
-              📧 출시 알림 받기
+              정식 출시 알림 받기 📧
             </button>
           </div>
         </div>

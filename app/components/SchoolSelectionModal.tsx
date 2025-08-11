@@ -13,7 +13,6 @@ export default function SchoolSelectionModal({ isOpen, onClose, onStart }: Schoo
   const [playerName, setPlayerName] = useState('');
   const [selectedSchool, setSelectedSchool] = useState('');
   const [customSchool, setCustomSchool] = useState('');
-  const [showCustomInput, setShowCustomInput] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,7 +22,7 @@ export default function SchoolSelectionModal({ isOpen, onClose, onStart }: Schoo
       return;
     }
 
-    const finalSchool = showCustomInput ? customSchool.trim() : selectedSchool;
+    const finalSchool = selectedSchool === 'custom' ? customSchool.trim() : selectedSchool;
     if (!finalSchool) {
       alert('학교를 선택하거나 입력해주세요.');
       return;
@@ -33,12 +32,8 @@ export default function SchoolSelectionModal({ isOpen, onClose, onStart }: Schoo
   };
 
   const handleSchoolChange = (school: string) => {
-    if (school === 'custom') {
-      setShowCustomInput(true);
-      setSelectedSchool('');
-    } else {
-      setShowCustomInput(false);
-      setSelectedSchool(school);
+    setSelectedSchool(school);
+    if (school !== 'custom') {
       setCustomSchool('');
     }
   };
@@ -80,51 +75,30 @@ export default function SchoolSelectionModal({ isOpen, onClose, onStart }: Schoo
               학교 선택 <span className="text-red-500">*</span>
             </label>
             
-            {/* 인기 학교 리스트 */}
-            <div className="space-y-2 mb-4">
-              {schoolRankings.slice(0, 6).map((school, index) => (
-                <label key={index} className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="school"
-                    value={school.name}
-                    checked={selectedSchool === school.name}
-                    onChange={(e) => handleSchoolChange(e.target.value)}
-                    className="text-[#0041C2]"
-                  />
-                  <div className="flex-1">
-                    <div className="font-medium text-gray-900">{school.name}</div>
-                    <div className="text-sm text-gray-500">
-                      {school.region} • 평균 {school.averageScore}점 • {school.participantCount}명 참여
-                    </div>
-                  </div>
-                  <div className="text-sm font-medium text-[#0041C2]">
-                    #{index + 1}위
-                  </div>
-                </label>
+            {/* 드롭다운 선택 */}
+            <select
+              value={selectedSchool}
+              onChange={(e) => handleSchoolChange(e.target.value)}
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#0041C2] text-gray-900 bg-white mb-4"
+            >
+              <option value="">학교를 선택하세요</option>
+              {schoolRankings.slice(0, 8).map((school, index) => (
+                <option key={index} value={school.name}>
+                  #{index + 1}위 - {school.name} ({school.region})
+                </option>
               ))}
-              
-              {/* 기타 학교 옵션 */}
-              <label className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <input
-                  type="radio"
-                  name="school"
-                  value="custom"
-                  checked={showCustomInput}
-                  onChange={(e) => handleSchoolChange(e.target.value)}
-                  className="text-[#0041C2]"
-                />
-                <span className="text-gray-700">기타 학교 (직접 입력)</span>
-              </label>
-            </div>
+              <option value="custom">기타 학교 (직접 입력)</option>
+            </select>
 
             {/* 커스텀 학교 입력 */}
-            {showCustomInput && (
+            {selectedSchool === 'custom' && (
               <input
                 type="text"
                 placeholder="우리 학교 이름을 입력하세요"
                 value={customSchool}
                 onChange={(e) => setCustomSchool(e.target.value)}
+                required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#0041C2] text-gray-900 placeholder-gray-500 bg-white"
               />
             )}
