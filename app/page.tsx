@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import Quiz, { QuizResult } from './components/Quiz';
 import QuizResultComponent from './components/QuizResult';
 import SchoolSelectionModal from './components/SchoolSelectionModal';
@@ -184,8 +185,13 @@ export default function Home() {
         
         {/* 헤더 */}
         <header className="relative z-10 px-6 py-4">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <div className="text-white text-2xl font-bold">QANDA</div>
+            <nav className="flex space-x-4">
+              <Link href="/device-check" className="text-white hover:text-[#FFD60A] transition-colors">
+                🎙️ 기기 점검
+              </Link>
+            </nav>
           </div>
         </header>
 
@@ -448,7 +454,21 @@ export default function Home() {
             참가하는 방법
           </h2>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-4 gap-6">
+            {/* 단계 0 - 기기 점검 */}
+            <div className="text-center">
+              <div className="bg-blue-500 text-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="text-6xl mb-4">🎙️</div>
+                <h3 className="text-xl font-bold mb-2">기기 점검</h3>
+                <p className="mb-4">마이크/스피커 테스트</p>
+                <Link href="/device-check">
+                  <button className="bg-white text-blue-500 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors">
+                    점검하기
+                  </button>
+                </Link>
+              </div>
+            </div>
+            
             {/* 단계 1 */}
             <div className="text-center">
               <div className="bg-white rounded-2xl p-8 shadow-lg">
